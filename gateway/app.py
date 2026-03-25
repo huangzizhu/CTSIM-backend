@@ -1,4 +1,4 @@
-from AbstractController import AbstractController
+from gateway.controller.AbstractController import AbstractController
 from Response import ResponseModel
 from fastapi import FastAPI,Depends
 from typing import List
