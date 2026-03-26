@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from pojo.User import UserLoginForm
+from pojo.User import UserLoginForm, User
 
 
 class UserDaoInterface(ABC):
@@ -8,5 +8,18 @@ class UserDaoInterface(ABC):
         self.name = name
 
     @abstractmethod
-    def login(self, userLoginForm: UserLoginForm):
+    def login(self, userLoginForm: UserLoginForm) -> User:
         pass
+
+    @abstractmethod
+    def deleteTokensByUserId(self, userId):
+        pass
+
+    @abstractmethod
+    def insertTokens(self, userId, newToken):
+        pass
+
+    @abstractmethod
+    def checkRefreshToken(self, refreshToken):
+        pass
+

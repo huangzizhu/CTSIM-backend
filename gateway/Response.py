@@ -1,5 +1,6 @@
 from fastapi.responses import JSONResponse
 from typing import Optional, Dict, Any, Union
+from fastapi.encoders import jsonable_encoder
 
 
 class ResponseModel(JSONResponse):
@@ -9,7 +10,7 @@ class ResponseModel(JSONResponse):
             "msg": msg,
             "data": data
         }
-        super().__init__(content=content)
+        super().__init__(content=jsonable_encoder(content))
 
 
 class Response:

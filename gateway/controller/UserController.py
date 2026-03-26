@@ -20,3 +20,14 @@ class UserController(AbstractController):
         def login(userLoginForm: UserLoginForm = Body(...)) -> ResponseModel:
             tokens: Tokens = self.userService.login(userLoginForm)
             return Response.success(tokens)
+
+        @self.router.delete("/logout/{userId}")
+        def logout(userId: int) -> ResponseModel:
+            self.userService.logout(userId)
+            return Response.success()
+
+        @self.router.post("/refresh")
+        def refresh(token: Tokens) -> ResponseModel:
+            # 生成新的token
+            newToken: Tokens = self.userService.refresh(token)
+            return Response.success(newToken)

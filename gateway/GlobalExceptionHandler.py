@@ -1,10 +1,13 @@
-from functools import wraps
 from typing import Dict, Type, Callable, Coroutine, Any
 from fastapi import Request, FastAPI
-from fastapi.responses import JSONResponse
 import inspect
-from Exception.TokenAuthException import TokenAuthException
 from gateway.Response import ResponseModel, Response
+
+from Exception.TokenAuthException import TokenAuthException
+from Exception.TokenExpiredException import TokenExpiryException
+from Exception.InvalidTokenError import InvalidTokenError
+from Exception.UserNotFoundException import UserNotFoundException
+from Exception.PasswordIncorrectException import PasswordIncorrectException
 
 
 def ExceptionHandler(exception: Type[Exception]):
@@ -34,4 +37,20 @@ class GlobalExceptionHandler:
 
     @ExceptionHandler(TokenAuthException)
     async def handleTokenAuthException(self, request: Request, exception: TokenAuthException) -> ResponseModel:
+        return Response.error(msg=exception.message)
+
+    @ExceptionHandler(TokenExpiryException)
+    async def handleTokenExpiryException(self, request: Request, exception: TokenExpiryException) -> ResponseModel:
+        return Response.error(msg=exception.message)
+
+    @ExceptionHandler(InvalidTokenError)
+    async def handleInvalidTokenError(self, request: Request, exception: InvalidTokenError) -> ResponseModel:
+        return Response.error(msg=exception.message)
+
+    @ExceptionHandler(UserNotFoundException)
+    async def handleUserNotFoundException(self, request: Request, exception: UserNotFoundException) -> ResponseModel:
+        return Response.error(msg=exception.message)
+
+    @ExceptionHandler(PasswordIncorrectException)
+    async def handlePasswordIncorrectException(self, request: Request, exception: PasswordIncorrectException)-> ResponseModel:
         return Response.error(msg=exception.message)

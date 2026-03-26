@@ -10,3 +10,9 @@ class UserLoginForm(BaseModel):
         ...,
         description="不能为空"
     )
+
+class User(BaseModel):
+    username: str
+    hashedPassword: str
+    userId: int
+    level: int

@@ -1,0 +1,51 @@
+import jwt
+import datetime
+from pojo.Tokens import Tokens
+from Exception.TokenExpiredException import TokenExpiryException
+from Exception.InvalidTokenError import InvalidTokenError
+
+# 秘钥（密钥用来加密和解密JWT）
+SECRET_KEY = "test_secret_key"
+
+
+# 生成 Access Token 和 Refresh Token 的函数
+def generateTokens(userId) -> Tokens:
+    # Access Token 有效期： 15 分钟
+    accessTokenExpiry = datetime.datetime.utcnow() + datetime.timedelta(minutes=15)
+    accessToken = jwt.encode({"userId": userId, "exp": accessTokenExpiry}, SECRET_KEY, algorithm="HS256")
+
+    # Refresh Token 有效期： 7 天
+    refreshTokenExpiry = datetime.datetime.utcnow() + datetime.timedelta(days=7)
+    refreshToken = jwt.encode({"userId": userId, "exp": refreshTokenExpiry}, SECRET_KEY, algorithm="HS256")
+
+    return Tokens(accessToken=accessToken, refreshToken=refreshToken)
+
+# 刷新 Access Token 的函数
+def refreshAccessToken(refreshToken):
+    try:
+        # 解码 Refresh Token，验证是否有效
+        decoded_refresh_token = jwt.decode(refreshToken, SECRET_KEY, algorithms=["HS256"])
+
+        # 生成新的 Access Token
+        userId = decoded_refresh_token["userId"]
+        newAccessTokenExpiry = datetime.datetime.utcnow() + datetime.timedelta(minutes=15)
+        newAccessToken = jwt.encode({"userId": userId, "exp": newAccessTokenExpiry}, SECRET_KEY, algorithm="HS256")
+
+        return newAccessToken,userId
+    except jwt.ExpiredSignatureError:
+        raise TokenExpiryException()
+    except jwt.InvalidTokenError:
+        raise InvalidTokenError()
+
+if __name__ == '__main__':
+    # 示例：如何使用这些函数
+
+    # 1. 生成 token
+    user_id = "12345"
+    access_token, refresh_token = generateTokens(user_id)
+    print("Access Token:", access_token)
+    print("Refresh Token:", refresh_token)
+
+    # 2. 使用 Refresh Token 刷新 Access Token
+    new_access_token = refreshAccessToken(refresh_token)
+    print("New Access Token:", new_access_token)
