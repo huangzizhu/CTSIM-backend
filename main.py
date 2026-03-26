@@ -1,5 +1,4 @@
 from gateway.app import Application
-
 app = Application()
 
 fastApiInstance = app.createApp()

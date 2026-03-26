@@ -1,4 +1,3 @@
-from gateway.dao.UserDaoWithSqlLite import UserDao
 from abc import ABC, abstractmethod
 
 from pojo.User import UserLoginForm

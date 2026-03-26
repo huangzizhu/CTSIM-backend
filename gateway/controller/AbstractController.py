@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 from fastapi import APIRouter
-from gateway.service.AbstractService import AbstractService
 
 
 class AbstractController(ABC):

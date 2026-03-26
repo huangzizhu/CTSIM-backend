@@ -1,9 +1,10 @@
 from gateway.controller.AbstractController import AbstractController
-from Response import ResponseModel
+from gateway.Response import ResponseModel
 from fastapi import FastAPI,Depends
 from typing import List
-from GlobalInterceptor import GlobalInterceptor
-from GlobalExceptionHandler import GlobalExceptionHandler
+from gateway.GlobalInterceptor import GlobalInterceptor
+from gateway.GlobalExceptionHandler import GlobalExceptionHandler
+from gateway.controller.UserController import UserController
 
 
 class Application:
@@ -12,8 +13,11 @@ class Application:
         self.controllers: List[AbstractController] = []
         self.globalExceptionHandler = GlobalExceptionHandler()
 
+    def _registerAllController(self):
+        self.controllers.append(UserController())
 
     def createApp(self) -> FastAPI:
+        self._registerAllController()
         app = FastAPI(
             debug=True,
             title="CT 管理系统后端",

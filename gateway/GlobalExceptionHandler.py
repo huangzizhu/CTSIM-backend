@@ -2,35 +2,33 @@ from functools import wraps
 from typing import Dict, Type, Callable, Coroutine, Any
 from fastapi import Request, FastAPI
 from fastapi.responses import JSONResponse
+import inspect
 from Exception.TokenAuthException import TokenAuthException
-from Response import ResponseModel, Response
+from gateway.Response import ResponseModel, Response
 
+
+def ExceptionHandler(exception: Type[Exception]):
+    def decorator(func):
+        setattr(func, "_exception_class", exception)
+        return func
+    return decorator
 
 class GlobalExceptionHandler:
     def __init__(self):
-        self.exceptionHandlerMap: Dict[Type[Exception], Callable[[Request, Exception], Coroutine[Any, Any, JSONResponse]]] = {}
+        self.exceptionHandlerMap: Dict[
+            Type[Exception],
+            Callable[[Request, Exception], Coroutine[Any, Any, ResponseModel]]
+        ] = {}
+        self._collectHandlers()
 
-
-    def ExceptionHandler(self, exception: Type[Exception]):
-        """
-            自定义装饰器：标记函数为指定异常的处理器，并自动加入全局映射
-
-            参数:
-                exc_class: 要处理的异常类（如 TokenError、RequestValidationError）
-        """
-
-        def decorator(handler_func: Callable[[Request, Exception], Coroutine[Any, Any, JSONResponse]]):
-            # 保留原函数的元信息（如函数名、文档字符串）
-            @wraps(handler_func)
-            async def wrapper(request: Request, exc: Exception):
-                # 执行原处理器函数逻辑
-                return await handler_func(request, exc)
-
-            self.exceptionHandlerMap[exception] = wrapper
-            return wrapper
-        return decorator
-
-    def registerAllHandler(self,app: FastAPI):
+    #一个一个函数收集，装饰器标记异常类型，反射获取函数上的标记，构建异常类型到函数的映射
+    def _collectHandlers(self):
+        for _, method in inspect.getmembers(self, predicate=inspect.ismethod):
+            exc_class = getattr(method, "_exception_class", None)
+            if exc_class is not None:
+                self.exceptionHandlerMap[exc_class] = method
+    #注册所有处理器
+    def registerAllHandler(self, app: FastAPI):
         for exc_class, handler in self.exceptionHandlerMap.items():
             app.add_exception_handler(exc_class, handler)
 
