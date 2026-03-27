@@ -5,6 +5,7 @@ from typing import List
 from gateway.GlobalInterceptor import GlobalInterceptor
 from gateway.GlobalExceptionHandler import GlobalExceptionHandler
 from gateway.controller.UserController import UserController
+from gateway.controller.PatientController import PatientController
 
 
 class Application:
@@ -15,6 +16,7 @@ class Application:
 
     def _registerAllController(self):
         self.controllers.append(UserController())
+        self.controllers.append(PatientController())
 
     def createApp(self) -> FastAPI:
         self._registerAllController()

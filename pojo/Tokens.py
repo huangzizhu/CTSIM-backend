@@ -1,5 +1,5 @@
-from pydantic import BaseModel
+from pydantic import BaseModel,Field
 
 class Tokens(BaseModel):
     accessToken: str
-    refreshToken: str
+    refreshToken: str = Field(...)

@@ -8,6 +8,7 @@ from Exception.TokenExpiredException import TokenExpiryException
 from Exception.InvalidTokenError import InvalidTokenError
 from Exception.UserNotFoundException import UserNotFoundException
 from Exception.PasswordIncorrectException import PasswordIncorrectException
+from Exception.DataBaseException import DataBaseException
 
 
 def ExceptionHandler(exception: Type[Exception]):
@@ -53,4 +54,8 @@ class GlobalExceptionHandler:
 
     @ExceptionHandler(PasswordIncorrectException)
     async def handlePasswordIncorrectException(self, request: Request, exception: PasswordIncorrectException)-> ResponseModel:
+        return Response.error(msg=exception.message)
+
+    @ExceptionHandler(DataBaseException)
+    async def handleDataBaseException(self, request: Request, exception: DataBaseException) -> ResponseModel:
         return Response.error(msg=exception.message)
