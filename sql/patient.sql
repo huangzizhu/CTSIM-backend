@@ -1,5 +1,5 @@
 CREATE TABLE patients (
-    userId                  INTEGER PRIMARY KEY AUTOINCREMENT,   -- 内部自增主键
+    pid                  INTEGER PRIMARY KEY AUTOINCREMENT,   -- 内部自增主键
     cardNo                  TEXT NOT NULL UNIQUE,                -- 就诊卡号 / 病历号
     name                    TEXT NOT NULL,                       -- 姓名
     gender                  TEXT NOT NULL,                       -- 性别（M/F/O）

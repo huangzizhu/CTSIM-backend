@@ -4,10 +4,9 @@ from fastapi import APIRouter,Body
 
 from gateway.controller.AbstractController import AbstractController
 from gateway.service.PatientService import PatientService
-from pojo.User import UserLoginForm
-from pojo.Tokens import Tokens
-from pojo.Patient import CreatePatient,UpdatePatient
+from pojo.Patient import CreatePatient,UpdatePatient,Patient
 from gateway.Response import ResponseModel, Response
+from typing import List
 
 class PatientController(AbstractController):
     def __init__(self):
@@ -27,4 +26,14 @@ class PatientController(AbstractController):
         @self.router.put("")
         def updatePatient(patient: UpdatePatient = Body(...)) -> ResponseModel:
             self.patientService.updatePatient(patient)
+            return Response.success()
+
+        @self.router.get("")
+        def getAllPatients() -> ResponseModel:
+            patients:List[Patient] = self.patientService.getAllPatients()
+            return Response.success(patients)
+
+        @self.router.delete("/{pid}")
+        def deletePatient(pid: int) -> ResponseModel:
+            self.patientService.deletePatient(pid)
             return Response.success()

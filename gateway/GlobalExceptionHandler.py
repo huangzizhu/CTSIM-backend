@@ -1,6 +1,8 @@
 from typing import Dict, Type, Callable, Coroutine, Any
 from fastapi import Request, FastAPI
 import inspect
+
+from Exception.PatientNotFoundException import PatientNotFoundException
 from gateway.Response import ResponseModel, Response
 
 from Exception.TokenAuthException import TokenAuthException
@@ -58,4 +60,8 @@ class GlobalExceptionHandler:
 
     @ExceptionHandler(DataBaseException)
     async def handleDataBaseException(self, request: Request, exception: DataBaseException) -> ResponseModel:
+        return Response.error(msg=exception.message)
+
+    @ExceptionHandler(PatientNotFoundException)
+    async def handlePatientNotFoundException(self, request: Request, exception: PatientNotFoundException) -> ResponseModel:
         return Response.error(msg=exception.message)

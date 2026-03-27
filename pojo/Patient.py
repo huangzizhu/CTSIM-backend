@@ -3,7 +3,7 @@ from typing import Optional
 
 
 class Patient(BaseModel):
-    userId: Optional[int] = None
+    pid: Optional[int] = None
     cardNo: str
     name: str
     gender: str
@@ -26,20 +26,21 @@ class CreatePatient(Patient):
     name: str = Field(..., max_length=50, description="患者姓名")
     gender: str = Field(..., max_length=1, description="性别")
     birthDate: str = Field(..., description="出生日期")
-    phone: str = Field(..., description="手机号")
-    idNumber: str = Field(..., description="身份证号")
+    phone: str = Field(..., description="手机号",min_length=11, max_length=11)
+    idNumber: str = Field(..., description="身份证号", min_length=18, max_length=18)
     address: Optional[str] = None
     emergencyContactName: Optional[str] = None
     emergencyContactPhone: Optional[str] = None
 
 # 修改病人请求模型
 class UpdatePatient(Patient):
+    pid: int = Field(..., description="患者ID")
     cardNo: Optional[str] = Field(None, max_length=20)
     name: Optional[str] = Field(None, max_length=50)
     gender: Optional[str] = Field(None, max_length=1)
     birthDate: Optional[str] = None
-    phone: Optional[str] = Field(None)
-    idNumber: Optional[str] = Field(None)
+    phone: Optional[str] = Field(None,description="手机号",min_length=11, max_length=11)
+    idNumber: Optional[str] = Field(None,description="身份证号", min_length=18, max_length=18)
     address: Optional[str] = None
     emergencyContactName: Optional[str] = None
     emergencyContactPhone: Optional[str] = None
