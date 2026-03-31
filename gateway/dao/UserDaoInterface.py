@@ -23,3 +23,6 @@ class UserDaoInterface(ABC):
     def checkRefreshToken(self, refreshToken):
         pass
 
+    def getUserByUid(self, uid: int) -> User:
+        pass
+

@@ -26,3 +26,7 @@ class PatientDaoInterface(ABC):
     @abstractmethod
     def deletePatient(self, pid) -> int:
         pass
+
+    @abstractmethod
+    def getPatientById(self, pid: int) -> Patient | None:
+        pass

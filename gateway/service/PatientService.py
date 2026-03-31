@@ -3,13 +3,13 @@ from typing import List
 from Exception.DataBaseException import DataBaseException
 from Exception.PatientNotFoundException import PatientNotFoundException
 from gateway.dao.PatientDaoInterface import PatientDaoInterface
-from gateway.dao.PatientDaoWithSqlLite import PatientDaoWithSqlLite
+from gateway.dao.PatientDaoOrm import PatientDaoOrm
 from pojo.Patient import CreatePatient, UpdatePatient,Patient
 from sqlite3 import Error as SQLiteError
 
 class PatientService:
     def __init__(self):
-        self.patientDao: PatientDaoInterface = PatientDaoWithSqlLite()
+        self.patientDao: PatientDaoInterface = PatientDaoOrm()
 
     def addPatient(self, patient: CreatePatient):
         try:

@@ -6,7 +6,8 @@ from gateway.GlobalInterceptor import GlobalInterceptor
 from gateway.GlobalExceptionHandler import GlobalExceptionHandler
 from gateway.controller.UserController import UserController
 from gateway.controller.PatientController import PatientController
-from gateway.controller.ConsultationController import ConsultationController
+from gateway.controller.VisitController import VisitController
+from gateway.controller.CTController import CTController
 
 
 class Application:
@@ -18,7 +19,8 @@ class Application:
     def _registerAllController(self):
         self.controllers.append(UserController())
         self.controllers.append(PatientController())
-        self.controllers.append(ConsultationController())
+        self.controllers.append(VisitController())
+        self.controllers.append(CTController())
 
     def createApp(self) -> FastAPI:
         self._registerAllController()

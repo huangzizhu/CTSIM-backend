@@ -1,4 +1,4 @@
-from pydantic import BaseModel,Field
+from pydantic import BaseModel,Field, ConfigDict
 class UserLoginForm(BaseModel):
     username: str = Field(
         ...,
@@ -16,3 +16,4 @@ class User(BaseModel):
     hashedPassword: str
     userId: int
     level: int
+    model_config = ConfigDict(from_attributes=True)

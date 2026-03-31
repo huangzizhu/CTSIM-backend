@@ -1,5 +1,5 @@
 from typing import Optional, Literal
-from pydantic import BaseModel, Field, conint
+from pydantic import BaseModel, Field, conint,ConfigDict
 
 
 class VisitBase(BaseModel):
@@ -50,6 +50,7 @@ class VisitBase(BaseModel):
         None,
         description="记录最后更新时间"
     )
+    model_config = ConfigDict(from_attributes=True)
 
     class Config:
         str_strip_whitespace = True
@@ -98,5 +99,5 @@ class Visit(VisitBase):
     visitId: int = Field(..., gt=0, description="就诊记录ID")
 
     class Config:
-        orm_mode = True
+        from_attributes = True
         str_strip_whitespace = True

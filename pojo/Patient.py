@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field, constr, condecimal
+from pydantic import BaseModel, Field, constr, condecimal, ConfigDict
 from typing import Optional
 
 
@@ -15,6 +15,7 @@ class Patient(BaseModel):
     emergencyContactPhone: Optional[str] = None
     createdTime: Optional[str] = None
     updatedTime: Optional[str] = None
+    model_config = ConfigDict(from_attributes=True)
 
     class Config:
         str_min_length = 1
