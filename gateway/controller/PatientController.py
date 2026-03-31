@@ -19,14 +19,14 @@ class PatientController(AbstractController):
 
         @self.router.post("")
         def addPatient(patient: CreatePatient = Body(...)) -> ResponseModel:
-            self.patientService.addPatient(patient)
-            return Response.success()
+            patient: Patient = self.patientService.addPatient(patient)
+            return Response.success(patient)
 
 
         @self.router.put("")
         def updatePatient(patient: UpdatePatient = Body(...)) -> ResponseModel:
-            self.patientService.updatePatient(patient)
-            return Response.success()
+            newPatient: Patient = self.patientService.updatePatient(patient)
+            return Response.success(patient)
 
         @self.router.get("")
         def getAllPatients() -> ResponseModel:

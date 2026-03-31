@@ -20,8 +20,8 @@ class VisitController(AbstractController):
 
         @self.router.post("")
         def addVisit(visit: VisitCreate = Body(...)) -> ResponseModel:
-            self.visitService.addVisit(visit)
-            return Response.success()
+            visit: Visit = self.visitService.addVisit(visit)
+            return Response.success(visit)
 
         # 根据pid查询所有就诊记录
         @self.router.get("/all/{pid}")
@@ -37,8 +37,8 @@ class VisitController(AbstractController):
 
         @self.router.put("")
         def updateVisit(visit: VisitUpdate) -> ResponseModel:
-            self.visitService.updateVisit(visit)
-            return Response.success()
+            newVisit: Visit = self.visitService.updateVisit(visit)
+            return Response.success(newVisit)
 
         @self.router.delete("/{visitId}")
         def deleteVisitByVisitId(visitId: int) -> ResponseModel:

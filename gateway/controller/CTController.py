@@ -24,7 +24,8 @@ class CTController(AbstractController):
 
         @self.router.post("/order")
         def addCTOrder(order: CTOrderCreate) -> ResponseModel:
-
+            ctOrder: CTOrder = self.CTService.addCTOrder(order)
+            return Response.success(ctOrder)
 
 
 

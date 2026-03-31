@@ -12,7 +12,7 @@ class PatientDaoInterface(ABC):
         self.name = name
 
     @abstractmethod
-    def addPatient(self, patient):
+    def addPatient(self, patient) -> Patient:
         pass
 
     @abstractmethod

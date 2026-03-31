@@ -11,19 +11,27 @@ class PatientService:
     def __init__(self):
         self.patientDao: PatientDaoInterface = PatientDaoOrm()
 
-    def addPatient(self, patient: CreatePatient):
+    def addPatient(self, patient: CreatePatient) -> Patient:
         try:
-            self.patientDao.addPatient(patient)
+            return self.patientDao.addPatient(patient)
         except SQLiteError as e:
             raise DataBaseException(e.args[0])
 
-    def updatePatient(self, patient: UpdatePatient):
+    def updatePatient(self, patient: UpdatePatient) -> Patient:
+        #更新，返回修改行数，
         try:
             countRows: int = self.patientDao.updatePatient(patient)
         except SQLiteError as e:
             raise DataBaseException(e.args[0])
         if countRows == 0:
             raise PatientNotFoundException(f"Patient {patient.pid} not found")
+        #回显
+        try:
+            return self.patientDao.getPatientById(patient.pid)
+        except SQLiteError as e:
+            raise DataBaseException(e.args[0])
+
+
 
     def getAllPatients(self) -> List[Patient]:
         try:

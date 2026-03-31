@@ -24,7 +24,7 @@ class VisitService:
         self.checkPatient(visit.patientId)
         self.checkUser(visit.doctorId)
         try:
-            self.visitDao.addVisit(visit)
+            return self.visitDao.addVisit(visit)
         except Exception as e:
             raise DataBaseException(e.args[0])
 
@@ -44,7 +44,8 @@ class VisitService:
         except Exception as e:
             raise DataBaseException(e.args[0])
 
-    def updateVisit(self, visit: VisitUpdate):
+    def updateVisit(self, visit: VisitUpdate) -> Visit:
+        # 更新就诊记录
         if visit.patientId is not None:
             self.checkPatient(visit.patientId)
         if visit.doctorId is not None:
@@ -55,6 +56,12 @@ class VisitService:
                 raise VisitNotFoundException(f"Visit visitId={visit.visitId} not found")
         except Exception as e:
             raise DataBaseException(e.args[0])
+        # 回显
+        try:
+            return self.visitDao.getVisitByPid(visit.visitId)
+        except Exception as e:
+            raise DataBaseException(e.args[0])
+
 
     def deleteVisitByVisitId(self, visitId: int):
         try:

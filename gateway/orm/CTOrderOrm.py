@@ -19,7 +19,7 @@ class PriorityEnum:
     EMERGENCY = 1   # 急诊
     VIP = 2         # VIP
 
-class CTOrder(OrmEngine().getBase()):
+class CTOrderOrm(OrmEngine().getBase()):
     __tablename__ = 'ct_order'
 
     orderId = Column(Integer, primary_key=True, autoincrement=True)

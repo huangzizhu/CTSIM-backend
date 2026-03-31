@@ -11,13 +11,13 @@ class PatientDaoOrm(PatientDaoInterface):
         # 保存 Session 工厂
         self.SessionLocal = self.engine.createSessionFactory()
 
-    def addPatient(self, patient: CreatePatient):
+    def addPatient(self, patient: CreatePatient) -> Patient:
         session = self.SessionLocal()
         patientOrm = PatientOrm(**patient.__dict__)
         try:
             session.add(patientOrm)
             session.commit()
-            return Patient.from_orm()
+            return Patient.model_validate(patientOrm)
         finally:
             session.close()
 
