@@ -25,8 +25,8 @@ class PatientController(AbstractController):
 
         @self.router.put("")
         def updatePatient(patient: UpdatePatient = Body(...)) -> ResponseModel:
-            newPatient: Patient = self.patientService.updatePatient(patient)
-            return Response.success(patient)
+            newPatient: Patient | None= self.patientService.updatePatient(patient)
+            return Response.success(newPatient)
 
         @self.router.get("")
         def getAllPatients() -> ResponseModel:

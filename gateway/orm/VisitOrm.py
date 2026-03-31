@@ -25,4 +25,4 @@ class VisitOrm(OrmEngine().getBase()):
     # 可选：添加关系，方便 ORM 查询关联对象
     patient = relationship("PatientOrm", back_populates="visits", foreign_keys=[patientId])
     doctor = relationship("UserOrm", back_populates="visits", foreign_keys=[doctorId])
-    ct_orders = relationship("CTOrderOrm", back_populates="visits")
+    ct_orders = relationship("CTOrderOrm", back_populates="visit")

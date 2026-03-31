@@ -5,11 +5,21 @@ from pojo.Patient import CreatePatient, UpdatePatient, Patient
 from sqlalchemy import update, func
 
 class PatientDaoOrm(PatientDaoInterface):
+
+    _instance = None
+
+    def __new__(cls, *args, **kwargs):
+        if not cls._instance:
+            cls._instance = super().__new__(cls)
+        return cls._instance
+
     def __init__(self):
-        super().__init__('patientDaoOrm')
-        self.engine = OrmEngine()
-        # 保存 Session 工厂
-        self.SessionLocal = self.engine.createSessionFactory()
+        if not hasattr(self, '_inited'):
+            super().__init__('patientDaoOrm')
+            self.engine = OrmEngine()
+            # 保存 Session 工厂
+            self.SessionLocal = self.engine.createSessionFactory()
+            self._inited = True
 
     def addPatient(self, patient: CreatePatient) -> Patient:
         session = self.SessionLocal()
@@ -44,13 +54,7 @@ class PatientDaoOrm(PatientDaoInterface):
         session = self.SessionLocal()
         try:
             patients = session.query(PatientOrm).all()
-            return [    Patient(
-                        **{
-                            **patient.__dict__,
-                            "createdTime": patient.createdTime.isoformat(),
-                            "updatedTime": patient.updatedTime.isoformat()
-                        })
-                        for patient in patients]
+            return [Patient.model_validate(patient) for patient in patients]
 
         finally:
             session.close()
@@ -61,13 +65,7 @@ class PatientDaoOrm(PatientDaoInterface):
             orm: PatientOrm = session.query(PatientOrm).filter(PatientOrm.pid == pid).one_or_none()
             if not orm:
                 return None
-            return Patient(
-                **{
-                    **orm.__dict__,
-                    "createdTime": orm.createdTime.isoformat(),
-                    "updatedTime": orm.updatedTime.isoformat()
-                }
-            )
+            return Patient.model_validate(orm)
         except Exception:
             session.rollback()
             raise

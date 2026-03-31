@@ -6,11 +6,20 @@ from typing import List
 from pojo.Visit import VisitCreate, Visit,VisitUpdate
 
 class VisitDaoOrm(VisitDaoInterface):
+    _instance = None
+
+    def __new__(cls, *args, **kwargs):
+        if not cls._instance:
+            cls._instance = super().__new__(cls)
+        return cls._instance
+
     def __init__(self):
-        super().__init__('visitDaoOrm')
-        self.engine = OrmEngine()
-        # 保存 Session 工厂
-        self.SessionLocal = self.engine.createSessionFactory()
+        if not hasattr(self, '_inited'):
+            super().__init__('visitDaoOrm')
+            self.engine = OrmEngine()
+            # 保存 Session 工厂
+            self.SessionLocal = self.engine.createSessionFactory()
+            self._inited = True
 
     def addVisit(self, visit: VisitCreate) -> Visit:
         session = self.SessionLocal()
@@ -40,7 +49,7 @@ class VisitDaoOrm(VisitDaoInterface):
     def getVisitByPid(self, pid: int) -> Visit | None:
         session = self.SessionLocal()
         try:
-            return session.query(VisitOrm).filter(VisitOrm.patientId == pid).order_by(VisitOrm.createdTime).first()
+            return session.query(VisitOrm).filter(VisitOrm.patientId == pid).order_by(VisitOrm.createdTime.desc()).first()
         except Exception:
             session.rollback()
             raise

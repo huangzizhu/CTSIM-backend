@@ -16,4 +16,8 @@ class User(BaseModel):
     hashedPassword: str
     userId: int
     level: int
-    model_config = ConfigDict(from_attributes=True)
+    model_config = ConfigDict(
+        from_attributes=True,
+        str_min_length=1,  # 设置最小长度
+        str_strip_whitespace=True  # 去除前后空白
+    )

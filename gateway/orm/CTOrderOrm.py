@@ -23,8 +23,8 @@ class CTOrderOrm(OrmEngine().getBase()):
     __tablename__ = 'ct_order'
 
     orderId = Column(Integer, primary_key=True, autoincrement=True)
-    patientId = Column(Integer, ForeignKey('patient.patientId'), nullable=False)
-    visitId = Column(Integer, ForeignKey('visit.visitId'), nullable=False)
+    patientId = Column(Integer, ForeignKey('patients.pid'), nullable=False)
+    visitId = Column(Integer, ForeignKey('visits.visitId'), nullable=False)
     ctId = Column(Integer, ForeignKey('ct.ctId'), nullable=False)
 
     status = Column(Integer, nullable=False)       # 0-5 对应 StatusEnum
@@ -43,7 +43,7 @@ class CTOrderOrm(OrmEngine().getBase()):
 
     # relationships
     patient = relationship("PatientOrm", back_populates="ct_orders",foreign_keys=[patientId])
-    visit = relationship("VisitOrm", back_populates="ct_orders",foreign_keys=[visitId])
+    visit = relationship("VisitOrm", back_populates="ct_orders", foreign_keys=[visitId])
     ct = relationship("CTOrm", back_populates="ct_orders",foreign_keys=[ctId])
 
     def __repr__(self):

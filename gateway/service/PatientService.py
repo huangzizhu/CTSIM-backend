@@ -17,7 +17,7 @@ class PatientService:
         except SQLiteError as e:
             raise DataBaseException(e.args[0])
 
-    def updatePatient(self, patient: UpdatePatient) -> Patient:
+    def updatePatient(self, patient: UpdatePatient) -> Patient | None:
         #更新，返回修改行数，
         try:
             countRows: int = self.patientDao.updatePatient(patient)

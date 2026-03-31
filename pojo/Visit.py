@@ -1,6 +1,6 @@
 from typing import Optional, Literal
 from pydantic import BaseModel, Field, conint,ConfigDict
-
+from datetime import datetime
 
 class VisitBase(BaseModel):
     patientId: int = Field(..., gt=0, description="患者ID，对应 patients.pid")
@@ -41,19 +41,19 @@ class VisitBase(BaseModel):
         "ongoing",
         description="就诊状态"
     )
-
-    createdTime: Optional[str] = Field(
+    createdTime: Optional[datetime] = Field(
         None,
         description="记录创建时间，通常由系统生成"
     )
-    updatedTime: Optional[str] = Field(
+    updatedTime: Optional[datetime] = Field(
         None,
         description="记录最后更新时间"
     )
-    model_config = ConfigDict(from_attributes=True)
-
-    class Config:
-        str_strip_whitespace = True
+    model_config = ConfigDict(
+        from_attributes=True,
+        str_min_length=1,  # 设置最小长度
+        str_strip_whitespace=True  # 去除前后空白
+    )
 
 
 class VisitCreate(VisitBase):
@@ -86,10 +86,7 @@ class VisitUpdate(BaseModel):
     triageLevel: Optional[conint(ge=1, le=4)] = None
     status: Optional[Literal["ongoing", "finished", "canceled"]] = None
 
-    updatedTime: Optional[str] = None
 
-    class Config:
-        str_strip_whitespace = True
 
 
 class Visit(VisitBase):
@@ -97,7 +94,3 @@ class Visit(VisitBase):
     查询/返回给前端时使用的完整实体
     """
     visitId: int = Field(..., gt=0, description="就诊记录ID")
-
-    class Config:
-        from_attributes = True
-        str_strip_whitespace = True

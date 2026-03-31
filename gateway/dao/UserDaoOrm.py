@@ -9,12 +9,20 @@ from pojo.User import UserLoginForm, User
 
 
 class UserDaoOrm(UserDaoInterface):
+    _instance = None
+
+    def __new__(cls, *args, **kwargs):
+        if not cls._instance:
+            cls._instance = super().__new__(cls)
+        return cls._instance
 
     def __init__(self):
-        super().__init__('userDaoOrm')
-        self.engine = OrmEngine()
-        # 保存 Session 工厂
-        self.SessionLocal = self.engine.createSessionFactory()
+        if not hasattr(self, '_inited'):
+            super().__init__('userDaoOrm')
+            self.engine = OrmEngine()
+            # 保存 Session 工厂
+            self.SessionLocal = self.engine.createSessionFactory()
+            self._inited = True
 
     def login(self, userLoginForm: UserLoginForm) -> User | None:
         """

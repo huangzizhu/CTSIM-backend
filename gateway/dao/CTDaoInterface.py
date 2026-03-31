@@ -11,3 +11,12 @@ class CTDaoInterface(ABC):
 
     def addCTOrder(self, order: CTOrderCreate) -> CTOrder:
         pass
+
+    def getAllCTOrdersByPID(self, pid: int) -> List[CTOrder]:
+        pass
+
+    def getNewestCTOrderByPID(self, pid: int) -> CTOrder | None:
+        pass
+
+    def getCTOrderByID(self, CtorId: int) -> CTOrder | None:
+        pass

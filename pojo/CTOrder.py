@@ -32,10 +32,11 @@ class CTOrderBase(BaseModel):
     priority: Optional[int] = Field(PriorityEnum.NORMAL, description="优先级 0-2 对应 PriorityEnum", ge=0, le=2)
     isEmergency: Optional[bool] = Field(False, description="是否紧急")
     notes: Optional[str] = Field(None, description="备注信息")
-    model_config = ConfigDict(from_attributes=True)
-    class Config:
-        orm_mode = True  # 允许从 ORM 模型转换为 Pydantic 模型
-        str_strip_whitespace = True
+    model_config = ConfigDict(
+        from_attributes=True,
+        str_min_length=1,  # 设置最小长度
+        str_strip_whitespace=True  # 去除前后空白
+    )
 
 # CTOrder 创建类
 class CTOrderCreate(CTOrderBase):
@@ -52,10 +53,6 @@ class CTOrderInDB(CTOrderBase):
     updatedAt: datetime = Field(..., description="更新时间")
     canceledAt: Optional[datetime] = Field(None, description="取消时间")
 
-    class Config:
-        orm_mode = True
-        str_strip_whitespace = True
-
 # CTOrder 实体类
 class CTOrder(CTOrderBase):
     orderId: int = Field(..., description="订单 ID", ge=1)
@@ -64,7 +61,3 @@ class CTOrder(CTOrderBase):
     canceledAt: Optional[datetime] = Field(None, description="取消时间")
     status: int = Field(..., description="状态", ge=0, le=5)  # 使用状态常量的范围验证
     priority: Optional[int] = Field(PriorityEnum.NORMAL, description="优先级", ge=0, le=2)
-
-    class Config:
-        orm_mode = True
-        str_strip_whitespace = True

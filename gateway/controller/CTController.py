@@ -27,5 +27,25 @@ class CTController(AbstractController):
             ctOrder: CTOrder = self.CTService.addCTOrder(order)
             return Response.success(ctOrder)
 
+        @self.router.get("/order/p/all/{pid}")
+        def getAllCTOrdersByPID(pid: int) -> ResponseModel:
+            ctOrders: List[CTOrder] = self.CTService.getAllCTOrdersByPID(pid)
+            return Response.success(ctOrders)
+
+        # 获取最新的Order
+        @self.router.get("/order/p/{pid}")
+        def getNewestCTOrderByPID(pid: int) -> ResponseModel:
+            ctOrder: CTOrder | None = self.CTService.getNewestCTOrderByPID(pid)
+            return Response.success(ctOrder)
+
+        @self.router.get("/order/c/{CTOrderId}")
+        def getCTOrderByID(CtorId: int) -> ResponseModel:
+            ctOrder: CTOrder = self.CTService.getCTOrderByID(CtorId)
+            return Response.success(ctOrder)
+
+
+
+
+
 
 

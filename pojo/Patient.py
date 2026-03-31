@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field, constr, condecimal, ConfigDict
 from typing import Optional
-
+from datetime import datetime
 
 class Patient(BaseModel):
     pid: Optional[int] = None
@@ -13,13 +13,13 @@ class Patient(BaseModel):
     address: Optional[str] = None
     emergencyContactName: Optional[str] = None
     emergencyContactPhone: Optional[str] = None
-    createdTime: Optional[str] = None
-    updatedTime: Optional[str] = None
-    model_config = ConfigDict(from_attributes=True)
-
-    class Config:
-        str_min_length = 1
-        str_strip_whitespace = True
+    createdTime: Optional[datetime] = None
+    updatedTime: Optional[datetime] = None
+    model_config = ConfigDict(
+        from_attributes=True,
+        str_min_length=1,  # 设置最小长度
+        str_strip_whitespace=True  # 去除前后空白
+    )
 
 # 创建病人请求模型
 class CreatePatient(Patient):
@@ -45,9 +45,5 @@ class UpdatePatient(Patient):
     address: Optional[str] = None
     emergencyContactName: Optional[str] = None
     emergencyContactPhone: Optional[str] = None
-    createdTime: Optional[str] = None  # 不修改
-    updatedTime: Optional[str] = None
-
-    class Config:
-        str_min_length = 1
-        str_strip_whitespace = True
+    createdTime: Optional[datetime] = None
+    updatedTime: Optional[datetime] = None
