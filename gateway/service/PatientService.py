@@ -15,21 +15,21 @@ class PatientService:
         try:
             return self.patientDao.addPatient(patient)
         except SQLiteError as e:
-            raise DataBaseException(e.args[0])
+            raise DataBaseException(str(e))
 
     def updatePatient(self, patient: UpdatePatient) -> Patient | None:
         #更新，返回修改行数，
         try:
             countRows: int = self.patientDao.updatePatient(patient)
         except SQLiteError as e:
-            raise DataBaseException(e.args[0])
+            raise DataBaseException(str(e))
         if countRows == 0:
             raise PatientNotFoundException(f"Patient {patient.pid} not found")
         #回显
         try:
             return self.patientDao.getPatientById(patient.pid)
         except SQLiteError as e:
-            raise DataBaseException(e.args[0])
+            raise DataBaseException(str(e))
 
 
 
@@ -37,14 +37,14 @@ class PatientService:
         try:
             patients: List[Patient] = self.patientDao.getAllPatients()
         except SQLiteError as e:
-            raise DataBaseException(e.args[0])
+            raise DataBaseException(str(e))
         return patients
 
     def deletePatient(self, pid):
         try:
             countRows: int = self.patientDao.deletePatient(pid)
         except SQLiteError as e:
-            raise DataBaseException(e.args[0])
+            raise DataBaseException(str(e))
         if countRows == 0:
             raise PatientNotFoundException(f"Patient pid = {pid} not found")
 

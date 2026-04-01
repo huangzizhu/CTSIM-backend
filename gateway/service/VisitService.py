@@ -23,7 +23,7 @@ class VisitService:
         try:
             return self.visitDao.addVisit(visit)
         except Exception as e:
-            raise DataBaseException(e.args[0])
+            raise DataBaseException(str(e))
 
     def getAllVisitsByPid(self, pid: int) -> List[Visit]:
         checkPatient(pid,self.patientDao)
@@ -31,7 +31,7 @@ class VisitService:
         try:
             return self.visitDao.getAllVisitsByPid(pid)
         except Exception as e:
-            raise DataBaseException(e.args[0])
+            raise DataBaseException(str(e))
 
     def getVisitByPid(self, pid):
         checkPatient(pid,self.patientDao)
@@ -39,7 +39,7 @@ class VisitService:
         try:
             return self.visitDao.getVisitByPid(pid)
         except Exception as e:
-            raise DataBaseException(e.args[0])
+            raise DataBaseException(str(e))
 
     def updateVisit(self, visit: VisitUpdate) -> Visit | None:
         # 更新就诊记录
@@ -52,12 +52,12 @@ class VisitService:
             if rowCount == 0:
                 raise VisitNotFoundException(f"Visit visitId={visit.visitId} not found")
         except Exception as e:
-            raise DataBaseException(e.args[0])
+            raise DataBaseException(str(e))
         # 回显
         try:
             return self.visitDao.getVisitByPid(visit.visitId)
         except Exception as e:
-            raise DataBaseException(e.args[0])
+            raise DataBaseException(str(e))
 
 
     def deleteVisitByVisitId(self, visitId: int):
@@ -66,7 +66,7 @@ class VisitService:
             if rowCount == 0:
                 raise VisitNotFoundException(f"Visit visitId={visitId} not found")
         except Exception as e:
-            raise DataBaseException(e.args[0])
+            raise DataBaseException(str(e))
 
 
 

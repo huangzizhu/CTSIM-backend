@@ -30,8 +30,8 @@ class Application:
             description="CT 管理系统后端",
             version="0.1.0",
             default_response_class=ResponseModel,
-            dependencies=[Depends(GlobalInterceptor)]
         )
+        app.add_middleware(GlobalInterceptor)
         for controller in self.controllers:
             app.include_router(controller.router)
 

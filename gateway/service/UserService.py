@@ -18,7 +18,7 @@ class UserService():
         try:
             user: User = self.userDao.login(userLoginForm)
         except Exception as e:
-            raise DataBaseException(e.args[0])
+            raise DataBaseException(str(e))
         if user:
             if user.hashedPassword == userLoginForm.hashedPassword:
                 # 登陆成功
@@ -30,7 +30,7 @@ class UserService():
                     # 存储新token
                     self.userDao.insertTokens(user.userId, newToken.refreshToken)
                 except Exception as e:
-                    raise DataBaseException(e.args[0])
+                    raise DataBaseException(str(e))
                 return newToken
             raise PasswordIncorrectException()
         raise UserNotFoundException("No user ")
@@ -39,14 +39,14 @@ class UserService():
         try:
             self.userDao.deleteTokensByUserId(userId)
         except Exception as e:
-            raise DataBaseException(e.args[0])
+            raise DataBaseException(str(e))
 
 
     def refresh(self, token: Tokens) -> Tokens:
         try:
             userId: int = self.userDao.checkRefreshToken(token.refreshToken)
         except Exception as e:
-            raise DataBaseException(e.args[0])
+            raise DataBaseException(str(e))
 
         # 这里的token是前端传来的refreshToken
         res = refreshAccessToken(token.refreshToken)

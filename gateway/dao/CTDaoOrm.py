@@ -29,6 +29,14 @@ class CTDaoOrm(CTDaoInterface):
         session.close()
         return [CT(**ct.__dict__) for ct in cts]
 
+    def getCTByCTId(self, ctId: int) -> CT | None:
+        session = self.SessionLocal()
+        try:
+            ctOrm: CTOrm = session.query(CTOrm).filter(CTOrm.ctId == ctId).one_or_none()
+            return CT.model_validate(CTOrm) if ctOrm is not None else None
+        finally:
+            session.close()
+
     def addCTOrder(self, order: CTOrderCreate) -> CTOrder:
         session = self.SessionLocal()
         ctOrderOrm = CTOrderOrm(**order.__dict__)
@@ -54,7 +62,7 @@ class CTDaoOrm(CTDaoInterface):
     def getNewestCTOrderByPID(self, pid: int) -> CTOrder | None:
         session = self.SessionLocal()
         try:
-            ctOrderOrm: CTOrderOrm | None = session.query(CTOrderOrm).filter(CTOrderOrm.patientId == pid).order_by(CTOrderOrm.ordered_at.desc()).first()
+            ctOrderOrm: CTOrderOrm | None = session.query(CTOrderOrm).filter(CTOrderOrm.patientId == pid).order_by(CTOrderOrm.createdAt.desc()).first()
             if ctOrderOrm is None:
                 return None
             return CTOrder.model_validate(ctOrderOrm)
@@ -65,7 +73,7 @@ class CTDaoOrm(CTDaoInterface):
         session = self.SessionLocal()
         try:
             ctOrderOrm: CTOrderOrm | None = session.query(CTOrderOrm).filter(CTOrderOrm.orderId == CtorId).one_or_none()
-            return CTOrder.model_validate(ctOrderOrm)
+            return CTOrder.model_validate(ctOrderOrm) if ctOrderOrm is not None else None
         finally:
             session.close()
 
@@ -74,7 +82,7 @@ class CTDaoOrm(CTDaoInterface):
         data = CTOrderUpdate.model_dump(order,exclude_none=True,exclude_unset=True)
         ctOrderOrm = CTOrderOrm(**data)
         try:
-            rowCount: int = session.add(ctOrderOrm)
+            rowCount: int = session.query(CTOrderOrm).filter(CTOrderOrm.orderId == ctOrderOrm.orderId).update(data)
             session.commit()
             return rowCount
         except Exception:

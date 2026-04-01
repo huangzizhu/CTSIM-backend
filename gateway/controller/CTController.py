@@ -1,6 +1,6 @@
 from typing import List
-from fastapi import APIRouter
-
+from fastapi import APIRouter,Path
+from utils.Log import Log
 from gateway.Response import Response,ResponseModel
 from gateway.controller.AbstractController import AbstractController
 from gateway.service.CTService import CTService
@@ -28,18 +28,18 @@ class CTController(AbstractController):
             return Response.success(ctOrder)
 
         @self.router.get("/order/p/all/{pid}")
-        def getAllCTOrdersByPID(pid: int) -> ResponseModel:
+        def getAllCTOrdersByPID(pid: int = Path(..., ge=1)) -> ResponseModel:
             ctOrders: List[CTOrder] = self.CTService.getAllCTOrdersByPID(pid)
             return Response.success(ctOrders)
 
         # 获取最新的Order
         @self.router.get("/order/p/{pid}")
-        def getNewestCTOrderByPID(pid: int) -> ResponseModel:
+        def getNewestCTOrderByPID(pid: int = Path(..., ge=1)) -> ResponseModel:
             ctOrder: CTOrder | None = self.CTService.getNewestCTOrderByPID(pid)
             return Response.success(ctOrder)
 
         @self.router.get("/order/c/{CTOrderId}")
-        def getCTOrderByID(CTOrderId: int) -> ResponseModel:
+        def getCTOrderByID(CTOrderId: int = Path(..., ge=1)) -> ResponseModel:
             ctOrder: CTOrder = self.CTService.getCTOrderByID(CTOrderId)
             return Response.success(ctOrder)
 
@@ -48,9 +48,11 @@ class CTController(AbstractController):
             ctOrder: CTOrder | None = self.CTService.updateOrder(order)
             return Response.success(ctOrder)
 
+
+        @Log
         @self.router.delete("/order/c/{CTOrderId}")
-        def cancelOrder(orderId: int) -> ResponseModel:
-            self.CTService. cancelOrder(orderId)
+        def cancelOrder(CTOrderId: int) -> ResponseModel:
+            self.CTService.cancelOrder(CTOrderId)
             return Response.success()
 
 

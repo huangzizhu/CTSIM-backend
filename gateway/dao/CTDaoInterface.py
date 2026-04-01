@@ -9,6 +9,9 @@ class CTDaoInterface(ABC):
     def getAllCT(self) -> List[CT]:
         pass
 
+    def getCTByCTId(self, ctId: int) -> CT | None:
+        pass
+
     def addCTOrder(self, order: CTOrderCreate) -> CTOrder:
         pass
 

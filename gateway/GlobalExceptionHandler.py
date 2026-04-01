@@ -11,6 +11,9 @@ from Exception.InvalidTokenError import InvalidTokenError
 from Exception.UserNotFoundException import UserNotFoundException
 from Exception.PasswordIncorrectException import PasswordIncorrectException
 from Exception.DataBaseException import DataBaseException
+from Exception.VisitNotFoundException import VisitNotFoundException
+from Exception.CTOrderNotFoundException import CTOrderNotFoundException
+from Exception.CTNotFoundException import CTNotFoundException
 
 
 def ExceptionHandler(exception: Type[Exception]):
@@ -64,4 +67,16 @@ class GlobalExceptionHandler:
 
     @ExceptionHandler(PatientNotFoundException)
     async def handlePatientNotFoundException(self, request: Request, exception: PatientNotFoundException) -> ResponseModel:
+        return Response.error(msg=exception.message)
+
+    @ExceptionHandler(VisitNotFoundException)
+    async def handleVisitNotFoundException(self, request: Request, exception: VisitNotFoundException) -> ResponseModel:
+        return Response.error(msg=exception.message)
+
+    @ExceptionHandler(CTOrderNotFoundException)
+    async def handleCTOrderNotFoundException(self, request: Request, exception: CTOrderNotFoundException) -> ResponseModel:
+        return Response.error(msg=exception.message)
+
+    @ExceptionHandler(CTNotFoundException)
+    async def handleCTNotFoundException(self, request: Request, exception: CTNotFoundException) -> ResponseModel:
         return Response.error(msg=exception.message)
