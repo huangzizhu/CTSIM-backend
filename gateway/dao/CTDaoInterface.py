@@ -20,3 +20,6 @@ class CTDaoInterface(ABC):
 
     def getCTOrderByID(self, CtorId: int) -> CTOrder | None:
         pass
+
+    def updateOrder(self, order: CTOrderUpdate) -> int:
+        pass

@@ -69,4 +69,18 @@ class CTDaoOrm(CTDaoInterface):
         finally:
             session.close()
 
+    def updateOrder(self, order: CTOrderUpdate) -> int:
+        session = self.SessionLocal()
+        data = CTOrderUpdate.model_dump(order,exclude_none=True,exclude_unset=True)
+        ctOrderOrm = CTOrderOrm(**data)
+        try:
+            rowCount: int = session.add(ctOrderOrm)
+            session.commit()
+            return rowCount
+        except Exception:
+            session.rollback()
+            raise
+        finally:
+            session.close()
+
 

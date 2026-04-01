@@ -39,9 +39,19 @@ class CTController(AbstractController):
             return Response.success(ctOrder)
 
         @self.router.get("/order/c/{CTOrderId}")
-        def getCTOrderByID(CtorId: int) -> ResponseModel:
-            ctOrder: CTOrder = self.CTService.getCTOrderByID(CtorId)
+        def getCTOrderByID(CTOrderId: int) -> ResponseModel:
+            ctOrder: CTOrder = self.CTService.getCTOrderByID(CTOrderId)
             return Response.success(ctOrder)
+
+        @self.router.put("/order")
+        def updateOrder(order: CTOrderUpdate) -> ResponseModel:
+            ctOrder: CTOrder | None = self.CTService.updateOrder(order)
+            return Response.success(ctOrder)
+
+        @self.router.delete("/order/c/{CTOrderId}")
+        def cancelOrder(orderId: int) -> ResponseModel:
+            self.CTService. cancelOrder(orderId)
+            return Response.success()
 
 
 

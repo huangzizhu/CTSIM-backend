@@ -49,3 +49,16 @@ class CTService:
         except Exception as e:
             raise DataBaseException(e.args[0])
 
+    def updateOrder(self, order: CTOrderUpdate) -> CTOrder | None:
+        try:
+            rowCount: int = self.CTDao.updateOrder(order)
+        except Exception as e:
+            raise DataBaseException(e.args[0])
+        if rowCount == 0:
+            raise CTOrderNotFoundException(f"CTOrder CTOrderId={order.orderId} not found")
+        return self.CTDao.getCTOrderByID(order.orderId)
+
+    def cancelOrder(self, orderId: int) -> None:
+        pass
+
+

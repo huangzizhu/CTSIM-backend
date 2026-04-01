@@ -19,6 +19,7 @@ class PriorityEnum:
 
 # CTOrder 基础类
 class CTOrderBase(BaseModel):
+    orderId: int = Field(None, description="订单 ID", ge=1)
     patientId: int = Field(..., description="患者 ID", ge=1)  # 这里加了最小值验证
     visitId: int = Field(..., description="就诊 ID", ge=1)
     ctId: int = Field(..., description="CT 设备 ID", ge=1)
@@ -44,18 +45,16 @@ class CTOrderCreate(CTOrderBase):
 
 # CTOrder 更新类
 class CTOrderUpdate(CTOrderBase):
-    pass
+    orderId: int = Field(..., description="订单 ID", ge=1)
 
 # CTOrder 数据库存储类
 class CTOrderInDB(CTOrderBase):
-    orderId: int = Field(..., description="订单 ID", ge=1)
     createdAt: datetime = Field(..., description="创建时间")
     updatedAt: datetime = Field(..., description="更新时间")
     canceledAt: Optional[datetime] = Field(None, description="取消时间")
 
 # CTOrder 实体类
 class CTOrder(CTOrderBase):
-    orderId: int = Field(..., description="订单 ID", ge=1)
     createdAt: datetime = Field(..., description="创建时间")
     updatedAt: datetime = Field(..., description="更新时间")
     canceledAt: Optional[datetime] = Field(None, description="取消时间")

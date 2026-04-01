@@ -1,5 +1,6 @@
 from gateway.dao.PatientDaoInterface import PatientDaoInterface
 from gateway.dao.UserDaoInterface import UserDaoInterface
+from gateway.dao.CTDaoInterface import CTDaoInterface
 from pojo.User import User
 from pojo.Patient import Patient
 from Exception.PatientNotFoundException import PatientNotFoundException
@@ -24,3 +25,6 @@ def checkPatient(pid: int, patientDao: PatientDaoInterface):
         raise DataBaseException(e.args[0])
     if not patient:
         raise PatientNotFoundException(f"Patient pid={pid} not found")
+
+def checkCTOrder(orderId: int, ctDao: CTDaoInterface):
+    pass
