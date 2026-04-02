@@ -1,31 +1,57 @@
 import json
 import time
 from datetime import datetime
+
+from gateway.dao.UserDaoInterface import UserDaoInterface
+from gateway.dao.UserDaoOrm import UserDaoOrm
 from pojo.Log import Log
 from fastapi import Request, Response, FastAPI
 from fastapi.responses import JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware
 from gateway.service.LogService import LogService
+from utils.JWTTokenTool import getUserId
+from Exception.TokenAuthException import TokenAuthException
+from pojo.User import User
 
 
 class GlobalInterceptor(BaseHTTPMiddleware):
     def __init__(self, app: FastAPI):
         super().__init__(app)
         self.logService = LogService()
+        self.userDao: UserDaoInterface = UserDaoOrm()
+        self.excludePaths = {
+            "/user/login",
+            "/docs",
+            "/user/refresh",
+        }
+
     async def dispatch(self, request: Request, call_next):
-        userId = 1
-        # token拦截
-        if 1 != 1:
-            return JSONResponse(
-                status_code=401, content={
-                    "code": 0,
-                    "message": "Unauthorized",
-                    "data": None
-                })
-        #缓存json或者路径参数
+        userId = 0
+        if request.url.path not in self.excludePaths:
+            try:
+                # token拦截
+                accessToken = request.headers.get("accessToken")
+                if not accessToken:
+                    raise TokenAuthException("accessToken is required")
+                userId = getUserId(accessToken)
+                if not userId:
+                    raise TokenAuthException("userId is required")#这个几乎不可能
+                user: User = self.userDao.getUserByUid(userId) #验证用户是否存在
+                if not user:
+                    raise TokenAuthException("userId is invalid")
+            except Exception as e:
+                return JSONResponse(
+                    content={
+                        "code": 0,
+                        "msg": str(e),
+                        "data": None
+                    },
+                    status_code=401
+                )
+        #到这里验证通过了
         bodyBytes = await request.body()
 
-        # 👇 把 body 塞回去（关键！）
+        # 👇 把 body 塞回去
         async def receive():
             return {
                 "type": "http.request",

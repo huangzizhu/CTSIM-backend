@@ -9,6 +9,7 @@ from gateway.controller.PatientController import PatientController
 from gateway.controller.VisitController import VisitController
 from gateway.controller.CTController import CTController
 from gateway.controller.LogController import LogController
+from fastapi.middleware.cors import CORSMiddleware
 
 
 class Application:
@@ -34,6 +35,13 @@ class Application:
             default_response_class=ResponseModel,
         )
         app.add_middleware(GlobalInterceptor)
+        app.add_middleware(
+            CORSMiddleware,
+            allow_origins=["*"],
+            allow_credentials=True,
+            allow_methods=["*"],
+            allow_headers=["*"],
+        )
         for controller in self.controllers:
             app.include_router(controller.router)
 
