@@ -8,6 +8,7 @@ from gateway.controller.UserController import UserController
 from gateway.controller.PatientController import PatientController
 from gateway.controller.VisitController import VisitController
 from gateway.controller.CTController import CTController
+from gateway.controller.LogController import LogController
 
 
 class Application:
@@ -21,6 +22,7 @@ class Application:
         self.controllers.append(PatientController())
         self.controllers.append(VisitController())
         self.controllers.append(CTController())
+        self.controllers.append(LogController())
 
     def createApp(self) -> FastAPI:
         self._registerAllController()

@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
-from RuleDataBase import RuleDataBase
-from RuleEngineContext import RuleEngineContext
+from CTDispatchEngine.RuleDataBase import RuleDataBase
+from CTDispatchEngine.RuleEngineContext import RuleEngineContext
 
 
 class RuleBase(ABC):

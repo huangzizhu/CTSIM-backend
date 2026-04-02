@@ -22,6 +22,7 @@ class CTController(AbstractController):
             cts: List[CT] = self.CTService.getAllCT()
             return Response.success(cts)
 
+        @Log
         @self.router.post("/order")
         def addCTOrder(order: CTOrderCreate) -> ResponseModel:
             ctOrder: CTOrder = self.CTService.addCTOrder(order)
@@ -43,6 +44,7 @@ class CTController(AbstractController):
             ctOrder: CTOrder = self.CTService.getCTOrderByID(CTOrderId)
             return Response.success(ctOrder)
 
+        @Log
         @self.router.put("/order")
         def updateOrder(order: CTOrderUpdate) -> ResponseModel:
             ctOrder: CTOrder | None = self.CTService.updateOrder(order)

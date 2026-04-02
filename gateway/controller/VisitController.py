@@ -1,11 +1,10 @@
 from fastapi import APIRouter,Body
-from sqlalchemy.testing.warnings import setup_filters
-
 from gateway.controller.AbstractController import AbstractController
 from gateway.service.VisitService import VisitService
 from pojo.Visit import VisitCreate,Visit,VisitUpdate
 from gateway.Response import ResponseModel,Response
 from typing import List
+from utils.Log import Log
 
 
 class VisitController(AbstractController):
@@ -18,6 +17,7 @@ class VisitController(AbstractController):
 
     def routerSetup(self):
 
+        @Log
         @self.router.post("")
         def addVisit(visit: VisitCreate = Body(...)) -> ResponseModel:
             visit: Visit = self.visitService.addVisit(visit)
@@ -35,11 +35,13 @@ class VisitController(AbstractController):
             visit: Visit = self.visitService.getVisitByPid(pid)
             return Response.success(visit)
 
+        @Log
         @self.router.put("")
         def updateVisit(visit: VisitUpdate) -> ResponseModel:
             newVisit: Visit = self.visitService.updateVisit(visit)
             return Response.success(newVisit)
 
+        @Log
         @self.router.delete("/{visitId}")
         def deleteVisitByVisitId(visitId: int) -> ResponseModel:
             self.visitService.deleteVisitByVisitId(visitId)

@@ -4,7 +4,7 @@ import datetime
 
 
 
-class FunctionLog(OrmEngine().getBase()):
+class LogOrm(OrmEngine().getBase()):
     __tablename__ = 'logs'
 
     logId = Column(Integer, primary_key=True, autoincrement=True)  # 日志ID
@@ -13,9 +13,7 @@ class FunctionLog(OrmEngine().getBase()):
     returnValue = Column(JSON, nullable=True)  # 返回值，存储为 JSON 格式
     userId = Column(Integer, nullable=False)  # 操作用户ID
     ipAddress = Column(String(50), nullable=False)  # 用户 IP 地址
-    source = Column(String(50), nullable=False)  # 请求来源 (WEB, API, APP)
     operationTime = Column(DateTime, default=datetime.datetime.utcnow)  # 操作时间
-    operationType = Column(String(50), nullable=False)  # 操作类型 (GET, POST, etc.)
     executionTime = Column(Float, nullable=True)  # 执行时长（单位：秒）
     errorMessage = Column(Text)  # 异常信息
     requestPath = Column(String(200), nullable=False)  # 请求路径

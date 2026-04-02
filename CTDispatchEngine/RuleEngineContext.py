@@ -1,6 +1,5 @@
 from typing import List
-
-from RuleBase import RuleBase
+from CTDispatchEngine.RuleBase import RuleBase
 
 
 class RuleEngineContext:
