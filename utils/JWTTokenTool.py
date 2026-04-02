@@ -7,7 +7,14 @@ from Exception.InvalidTokenError import InvalidTokenError
 # 秘钥（密钥用来加密和解密JWT）
 SECRET_KEY = "test_secret_key"
 
-
+def getUserId(accessToken) -> int:
+    try:
+        decodedAccessToken = jwt.decode(accessToken, SECRET_KEY, algorithms=["HS256"])
+        return decodedAccessToken["userId"]
+    except jwt.ExpiredSignatureError:
+        raise TokenExpiryException("token expired")
+    except jwt.InvalidTokenError:
+        raise InvalidTokenError("invalid token")
 # 生成 Access Token 和 Refresh Token 的函数
 def generateTokens(userId) -> Tokens:
     # Access Token 有效期： 15 分钟

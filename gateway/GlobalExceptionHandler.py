@@ -2,6 +2,8 @@ from typing import Dict, Type, Callable, Coroutine, Any
 from fastapi import Request, FastAPI
 import inspect
 
+from starlette.responses import JSONResponse
+
 from Exception.PatientNotFoundException import PatientNotFoundException
 from gateway.Response import ResponseModel, Response
 
@@ -42,12 +44,26 @@ class GlobalExceptionHandler:
             app.add_exception_handler(exc_class, handler)
 
     @ExceptionHandler(TokenAuthException)
-    async def handleTokenAuthException(self, request: Request, exception: TokenAuthException) -> ResponseModel:
-        return Response.error(msg=exception.message)
+    async def handleTokenAuthException(self, request: Request, exception: TokenAuthException) -> JSONResponse:
+        return JSONResponse(
+            content={
+                "code": 0,
+                "msg": exception.message,
+                "data": None}
+             ,
+            status_code=401
+        )
 
     @ExceptionHandler(TokenExpiryException)
-    async def handleTokenExpiryException(self, request: Request, exception: TokenExpiryException) -> ResponseModel:
-        return Response.error(msg=exception.message)
+    async def handleTokenExpiryException(self, request: Request, exception: TokenExpiryException) -> JSONResponse:
+        return JSONResponse(
+            content={
+                "code": 0,
+                "msg": exception.message,
+                "data": None}
+             ,
+            status_code=401
+        )
 
     @ExceptionHandler(InvalidTokenError)
     async def handleInvalidTokenError(self, request: Request, exception: InvalidTokenError) -> ResponseModel:
