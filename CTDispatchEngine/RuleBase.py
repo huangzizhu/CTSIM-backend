@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from CTDispatchEngine.RuleDataBase import RuleDataBase
+from CTDispatchEngine.PatientData import PatientData
 from CTDispatchEngine.RuleEngineContext import RuleEngineContext
 
 
@@ -11,5 +11,5 @@ class RuleBase(ABC):
         self.priority: int = priority
 
     @abstractmethod
-    def evaluate(self, data: RuleDataBase, context:RuleEngineContext) -> RuleEngineContext:
+    def evaluate(self, data: PatientData, context:RuleEngineContext) -> RuleEngineContext:
         pass

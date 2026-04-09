@@ -1,6 +1,6 @@
 from typing import List
 
-from CTDispatchEngine.RuleDataBase import RuleDataBase
+from CTDispatchEngine.PatientData import PatientData
 from CTDispatchEngine.RuleBase import RuleBase
 from CTDispatchEngine.RuleEngineContext import RuleEngineContext
 
@@ -17,7 +17,7 @@ class RuleEngine:
     def removeRule(self, ruleName: str):
         self.rules = [rule for rule in self.rules if rule.ruleName != ruleName]
 
-    def evaluate(self, data: RuleDataBase) -> RuleEngineContext:
+    def evaluate(self, data: PatientData) -> RuleEngineContext:
         context: RuleEngineContext = RuleEngineContext()
         for rule in self.rules:
             rule.evaluate(data, context)

@@ -9,4 +9,3 @@ class Dispatcher:
     def dispatchPatients(self, patients):
         pass
 
-    模拟器
